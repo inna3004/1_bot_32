@@ -1,17 +1,10 @@
+# todo если какие-то импорты не используются - убирай их, соблюдай чистоту кода. тут сама удалила
 import logging
-import asyncio
 from datetime import datetime, timedelta
-from telegram import Update, ChatAction, ChatMember
-from config import Config
+from telegram import Update, ChatMember
 from storage.repository import SubscriberRepository, InviteRepository
-from storage.postgres_storage import init_db
-from telegram.ext import Updater, CommandHandler, CallbackContext, ChatMemberHandler, MessageHandler, Filters, ChatJoinRequestHandler
+from telegram.ext import Updater, CallbackContext, ChatMemberHandler, MessageHandler, Filters, ChatJoinRequestHandler
 from storage.postgres_storage import get_connection
-import sys
-import threading
-from telethon import TelegramClient
-from telethon.sessions import MemorySession
-from telethon.sessions import StringSession
 from config import Config
 from telethon_client import telethon_tracker
 
@@ -894,16 +887,16 @@ def sync_telethon_periodically(context: CallbackContext):
         logger.error(f"❌ Ошибка периодической синхронизации: {e}")
 
 
-
-def get_connection():
-    """Получить соединение с базой данных с обработкой ошибок."""
-    try:
-        conn = psycopg2.connect(Config.DATABASE_URL)
-        conn.autocommit = False
-        return conn
-    except Exception as e:
-        logger.error(f"❌ Ошибка подключения к БД: {e}")
-        raise
+# todo дубликат, уже есть в postgres_storage.py
+# def get_connection():
+#     """Получить соединение с базой данных с обработкой ошибок."""
+#     try:
+#         conn = psycopg2.connect(Config.DATABASE_URL)
+#         conn.autocommit = False
+#         return conn
+#     except Exception as e:
+#         logger.error(f"❌ Ошибка подключения к БД: {e}")
+#         raise
 
 # def main():
 #     """Упрощенный запуск бота для Windows."""

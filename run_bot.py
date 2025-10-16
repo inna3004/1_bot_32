@@ -7,6 +7,8 @@ import logging
 import sys
 import os
 
+from storage.postgres_storage import init_db
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 logging.basicConfig(level=logging.INFO)
@@ -18,6 +20,11 @@ def main():
 
     updater = None
     try:
+        # todo добавила в стартовый скрипт запуск БД
+        logger.info("🚀 Инициализация БД")
+        init_db()
+
+        updater = setup_application()
         logger.info("🚀 Запуск бота (PTB 13.15)...")
 
         updater = setup_application()

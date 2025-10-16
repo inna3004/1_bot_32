@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped   # todo я бы на always поменяла, чтоб авторестарт был на всякий случай
+    volumes:
+#      - ./storage:/app/storage  # todo в контейнере ничего не поменяется в этой папке, нет смысла монтировать. удалить
+      - ./logs:/app/logs  # todo нужен, только если логи пишутся в файл
+      - ./bot_session:/app/bot_session  # todo нужен, только если данные сессии пишутся в файл
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14-alpine
+    volumes:
+#      - ./storage/postgres:/var/lib/postgresql/data  # todo далеко спрятала, надо в корне проекта, как ниже указано
+      - ./postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped  # todo я бы на always поменяла, чтоб авторестарт был на всякий случай
+    environment:
+      - POSTGRES_DB=delete
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=5g
+#    ports:
+#      - "5433:5432"  # todo на сервере никогда не оставляй открытые порты, иначе это может плохо закончится
+    expose: # todo закрываем порт
+      - "5432"

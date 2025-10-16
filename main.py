@@ -1,4 +1,4 @@
-# todo если какие-то импорты не используются - убирай их, соблюдай чистоту кода. тут сама удалила
+
 import logging
 from datetime import datetime, timedelta
 from telegram import Update, ChatMember
@@ -864,15 +864,6 @@ def setup_application():
     return updater
 
 
-# def sync_telethon_periodically(context: CallbackContext):
-#     """Периодическая синхронизация через Telethon"""
-#     try:
-#         logger.info("🔄 Запуск периодической синхронизации Telethon...")
-#         result = telethon_tracker.force_sync_members_sync()
-#         logger.info(f"📊 Результат синхронизации: {result}")
-#     except Exception as e:
-#         logger.error(f"❌ Ошибка периодической синхронизации: {e}")
-
 
 def sync_telethon_periodically(context: CallbackContext):
     """Периодическая синхронизация через Telethon"""
@@ -886,29 +877,4 @@ def sync_telethon_periodically(context: CallbackContext):
     except Exception as e:
         logger.error(f"❌ Ошибка периодической синхронизации: {e}")
 
-
-# todo дубликат, уже есть в postgres_storage.py
-# def get_connection():
-#     """Получить соединение с базой данных с обработкой ошибок."""
-#     try:
-#         conn = psycopg2.connect(Config.DATABASE_URL)
-#         conn.autocommit = False
-#         return conn
-#     except Exception as e:
-#         logger.error(f"❌ Ошибка подключения к БД: {e}")
-#         raise
-
-# def main():
-#     """Упрощенный запуск бота для Windows."""
-#     try:
-#         # Простой запуск для Windows
-#         updater = setup_application()
-#         logger.info("🔄 Бот запускается...")
-#         updater.start_polling()
-#         updater.idle()
-#     except KeyboardInterrupt:
-#         print("Бот остановлен пользователем")
-#     except Exception as e:
-#         logger.error(f"Критическая ошибка: {e}")
-#         raise
 

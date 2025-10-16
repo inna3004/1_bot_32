@@ -16,10 +16,7 @@ class Config:
     TELEGRAM_API_HASH = os.getenv('TELEGRAM_API_HASH')
     TELEGRAM_SESSION_NAME = os.getenv('TELEGRAM_SESSION_NAME', 'bot_session')
 
-    # Пути для Docker  # todo не используются, убрать из конфига
-    SESSION_PATH = '/app/bot_session'
-    STORAGE_PATH = '/app/storage'
-    LOGS_PATH = '/app/logs'
+
 
     HIDDEN_COMMANDS = [
         'invite', 'generate_invite', 'active_invites', 'force_add',

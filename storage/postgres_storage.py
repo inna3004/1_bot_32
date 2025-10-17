@@ -16,7 +16,7 @@ def init_db():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS subscribers (
                 id SERIAL PRIMARY KEY,
-                user_id BIGINT NOT NULL UNIQUE,
+                user_id BIGINT NOT NULL,
                 username VARCHAR(255),
                 first_name VARCHAR(255),
                 last_name VARCHAR(255),
@@ -33,29 +33,11 @@ def init_db():
             )
         ''')
 
-        # Таблица инвайт-ссылок
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS invite_links (
-                id SERIAL PRIMARY KEY,
-                user_id BIGINT NOT NULL,
-                invite_link TEXT NOT NULL UNIQUE,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                expired BOOLEAN DEFAULT FALSE,
-                used BOOLEAN DEFAULT FALSE,
-                used_by BIGINT,
-                used_at TIMESTAMP,
-                is_general BOOLEAN DEFAULT FALSE,
-                created_by BIGINT
-            )
-        ''')
-
         # Добавляем недостающие столбцы, если их нет
         additional_columns = [
             ('subscribers', 'detection_source', 'VARCHAR(50)'),
             ('subscribers', 'last_join_date', 'TIMESTAMP'),
             ('subscribers', 'is_active', 'BOOLEAN DEFAULT TRUE'),
-            ('invite_links', 'is_general', 'BOOLEAN DEFAULT FALSE'),
-            ('invite_links', 'created_by', 'BIGINT')
         ]
 
         for table, column, column_type in additional_columns:
@@ -73,9 +55,6 @@ def init_db():
             'CREATE INDEX IF NOT EXISTS idx_user_id ON subscribers(user_id)',
             'CREATE INDEX IF NOT EXISTS idx_join_date ON subscribers(join_date)',
             'CREATE INDEX IF NOT EXISTS idx_removed ON subscribers(removed)',
-            'CREATE INDEX IF NOT EXISTS idx_invite_user ON invite_links(user_id)',
-            'CREATE INDEX IF NOT EXISTS idx_invite_link ON invite_links(invite_link)',
-            'CREATE INDEX IF NOT EXISTS idx_subscribers_active ON subscribers(is_active)',
             'CREATE INDEX IF NOT EXISTS idx_subscribers_channel ON subscribers(channel_id)'
         ]
 

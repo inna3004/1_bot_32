@@ -23,9 +23,7 @@ def main():
         logger.info("🚀 Инициализация БД")
         init_db()
 
-        updater = setup_application()
         logger.info("🚀 Запуск бота (PTB 13.15)...")
-
         updater = setup_application()
 
         logger.info("✅ Бот запущен. Используйте Ctrl+C для остановки")
@@ -41,7 +39,7 @@ def main():
             updater.stop()
         # Останавливаем Telethon - ИСПОЛЬЗУЕМ ПРАВИЛЬНЫЙ ТРЕКЕР
         from telethon_client import telethon_tracker
-        telethon_tracker.stop_sync()
+        telethon_tracker.client.disconnect()
         logger.info("🛑 Бот и Telethon остановлены")
 
 

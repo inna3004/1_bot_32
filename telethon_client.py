@@ -206,7 +206,7 @@ class TelethonTracker:
 
                     for channel_id in channel_identifiers:
                         try:
-                            entity = await self.client.get_entity(channel_id)
+                            entity = await temp_client.get_entity(channel_id)
                             logger.info(f"✅ Канал найден с ID: {channel_id}")
                         except Exception as e:
                             logger.debug(f"❌ Не удалось найти с ID {channel_id}: {e}")
@@ -243,43 +243,6 @@ class TelethonTracker:
 
         except Exception as e:
             logger.error(f"❌ Ошибка периодической синхронизации: {e}")
-
-    def get_member_count_sync(self, channel_id):
-        """Синхронное получение количества участников"""
-        try:
-            async def sync_task(channel_id):
-                temp_client = TelegramClient(
-                    MemorySession(),
-                    Config.TELEGRAM_API_ID,
-                    Config.TELEGRAM_API_HASH,
-                    connection_retries=5,
-                    retry_delay=2,
-                    flood_sleep_threshold=60
-                )
-
-                try:
-                    await temp_client.start(bot_token=Config.TELEGRAM_TOKEN)
-                    try:
-                        entity = await self.client.get_entity(channel_id)
-                        logger.info(f"✅ Канал найден с ID: {channel_id}")
-                    except Exception as e:
-                        logger.debug(f"❌ Не удалось найти с ID {channel_id}: {e}")
-                        return False
-
-                    participants = await self.client.get_participants(entity)
-                    return len([p for p in participants if not p.bot])
-                finally:
-                    await temp_client.disconnect()
-
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            result = loop.run_until_complete(sync_task(channel_id))
-            loop.close()
-            return result
-
-        except Exception as e:
-            logger.error(f"❌ Ошибка периодической синхронизации: {e}")
-            return False
 
 
 # Глобальный экземпляр
